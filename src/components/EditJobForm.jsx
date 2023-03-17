@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchWhichWillBeUpdate, updateJob } from "../features/job/jobSlice";
 
 function EditJobForm() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const dispatch = useDispatch();
   const { jobToEdit, isLoading, isError, error } = useSelector(
@@ -40,6 +41,7 @@ function EditJobForm() {
       deadline: formData.deadline,
     };
     dispatch(updateJob({ id: Number(id), jobData }));
+    navigate("/");
   }
 
   function handleChange(event) {

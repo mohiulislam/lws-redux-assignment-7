@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { BsFillStopFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { removeJob } from "../features/job/jobSlice";
+import { FaTrash } from "react-icons/fa";
+import { FaPen } from "react-icons/fa";
 function Job({ job: { title, type, deadline, salary, id } }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -47,7 +49,7 @@ function Job({ job: { title, type, deadline, salary, id } }) {
             type="button"
             className="lws-edit btn btn-primary"
           >
-            <i className="fa-solid fa-pen text-gray-300 -ml-1 mr-2"></i>
+            <FaPen className="fa-solid fa-pen text-gray-300 -ml-1 mr-2"></FaPen>
             Edit
           </button>
         </span>
@@ -58,7 +60,7 @@ function Job({ job: { title, type, deadline, salary, id } }) {
             type="button"
             className="lws-delete btn btn-danger"
           >
-            <i className="fa-solid fa-trash text-gray-300 -ml-1 mr-2"></i>
+            <FaTrash className="text-gray-300 -ml-1 mr-2"></FaTrash>
             Delete
           </button>
         </span>
