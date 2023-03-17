@@ -1,11 +1,16 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { BsFillStopFill } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { removeJob } from "../features/job/jobSlice";
 function Job({ job: { title, type, deadline, salary, id } }) {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   function handleEdit() {
     navigate(`/EditJob/${id}`);
+  }
+  function handleDelete() {
+    dispatch(removeJob(id));
   }
   return (
     <div className="lws-single-job">
@@ -48,7 +53,11 @@ function Job({ job: { title, type, deadline, salary, id } }) {
         </span>
 
         <span className="sm:ml-3">
-          <button type="button" className="lws-delete btn btn-danger">
+          <button
+            onClick={handleDelete}
+            type="button"
+            className="lws-delete btn btn-danger"
+          >
             <i className="fa-solid fa-trash text-gray-300 -ml-1 mr-2"></i>
             Delete
           </button>

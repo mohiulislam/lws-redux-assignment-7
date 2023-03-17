@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getJobById, getJobs, patchJob, postJob } from "./jobApi";
+import { deleteJob, getJobById, getJobs, postJob, putJob } from "./jobApi";
 
 const initialState = {
   jobs: [],
@@ -14,13 +14,6 @@ export const fetchJobs = createAsyncThunk("job/fetchJobs", async () => {
   const jobs = await getJobs();
   return jobs;
 });
-export const fetchJobById = createAsyncThunk(
-  "jobs/fetchJobById",
-  async (jobId, data) => {
-    const job = await patchJob(jobId, data);
-    return job;
-  }
-);
 export const createJob = createAsyncThunk("job/createJob", async (data) => {
   const job = await postJob(data);
   return job;
@@ -28,17 +21,21 @@ export const createJob = createAsyncThunk("job/createJob", async (data) => {
 export const fetchWhichWillBeUpdate = createAsyncThunk(
   "job/fetchWhichWillBeUpdate",
   async (id) => {
-    const jobs = await getJobById(id);
-    return jobs;
+    const job = await getJobById(id);
+    return job;
   }
 );
 export const updateJob = createAsyncThunk(
   "job/updateJob",
-  async ({ id, data }) => {
-    const job = await patchJob(id, data);
+  async ({ id, jobData }) => {
+    const job = await putJob(id, jobData);
     return job;
   }
 );
+export const removeJob = createAsyncThunk("job/removeJob", async (id) => {
+  const job = await deleteJob(id);
+  return job;
+});
 
 // create slice
 const jobSlice = createSlice({
@@ -105,6 +102,22 @@ const jobSlice = createSlice({
         state.jobs[indexToUpdate] = action.payload;
       })
       .addCase(updateJob.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.error = action.error?.message;
+      })
+      .addCase(removeJob.pending, (state) => {
+        state.isError = false;
+        state.isLoading = true;
+      })
+      .addCase(removeJob.fulfilled, (state, action) => {
+        console.log(action.payload);
+
+        state.isError = false;
+        state.isLoading = false;
+        state.jobs = state.jobs.filter((job) => job.id !== action.meta.arg);
+      })
+      .addCase(removeJob.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.error = action.error?.message;

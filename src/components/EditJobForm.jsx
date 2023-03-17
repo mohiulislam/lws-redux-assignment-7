@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchWhichWillBeUpdate, updateJob } from "../features/job/jobSlice";
@@ -7,19 +7,45 @@ function EditJobForm() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { jobToEdit } = useSelector((state) => state.job);
+  const [formData, setFormData] = useState({
+    title: "",
+    type: "",
+    salary: "",
+    deadline: "",
+  });
+
   useEffect(() => {
     dispatch(fetchWhichWillBeUpdate(id));
   }, [dispatch, id]);
 
+  useEffect(() => {
+    if (jobToEdit) {
+      setFormData({
+        title: jobToEdit.title,
+        type: jobToEdit.type,
+        salary: jobToEdit.salary,
+        deadline: jobToEdit.deadline,
+      });
+    }
+  }, [jobToEdit]);
+
   function handleEdit(event) {
-    const { elements } = event.target;
+    event.preventDefault();
     const jobData = {
-      title: elements.lwsJobTitle.value,
-      type: elements.lwsJobType.value,
-      salary: +elements.lwsJobSalary.value,
-      deadline: elements.lwsJobDeadline.value,
+      title: formData.title,
+      type: formData.type,
+      salary: +formData.salary,
+      deadline: formData.deadline,
     };
-    dispatch(updateJob(id, jobData));
+    dispatch(updateJob({ id: Number(id), jobData }));
+  }
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   }
   return (
     <main className="max-w-3xl rounded-lg mx-auto relative z-20 p-10 xl:max-w-none bg-[#1E293B]">
@@ -35,9 +61,11 @@ function EditJobForm() {
               Job Title
             </label>
             <select
+              onChange={handleChange}
               id="lws-JobTitle"
-              name="lwsJobTitle"
+              name="title"
               required
+              value={formData.title}
             >
               <option value="" hidden>
                 Select Job
@@ -61,7 +89,13 @@ function EditJobForm() {
 
           <div className="fieldContainer">
             <label htmlFor="lws-JobType">Job Type</label>
-            <select value={""} id="lws-JobType" name="lwsJobType" required>
+            <select
+              onChange={handleChange}
+              value={formData.type}
+              id="lws-JobType"
+              name="type"
+              required
+            >
               <option value="" hidden>
                 Select Job Type
               </option>
@@ -76,8 +110,10 @@ function EditJobForm() {
             <div className="flex border rounded-md shadow-sm border-slate-600">
               <span className="input-tag">BDT</span>
               <input
+                value={formData.salary}
+                onChange={handleChange}
                 type="number"
-                name="lwsJobSalary"
+                name="salary"
                 id="lws-JobSalary"
                 required
                 className="!rounded-l-none !border-0"
@@ -89,8 +125,10 @@ function EditJobForm() {
           <div className="fieldContainer">
             <label htmlFor="lws-JobDeadline">Deadline</label>
             <input
+              value={formData.deadline}
+              onChange={handleChange}
               type="date"
-              name="lwsJobDeadline"
+              name="deadline"
               id="lws-JobDeadline"
               required
             />

@@ -12,7 +12,11 @@ export async function postJob(data) {
   const response = await axios.post("/jobs", data);
   return response.data;
 }
-export const patchJob = async (id, data) => {
-  const response = await axios.patch(`/jobs/${id}`, data);
+export const putJob = async (id, data) => {
+  const response = await axios.put(`/jobs/${id}`, data);
+  return response.data;
+};
+export const deleteJob = async (id) => {
+  const response = axios.delete(`/jobs/${id}`);
   return response.data;
 };
