@@ -64,7 +64,7 @@ function MainLayout({ children }) {
                 </ul>
               </li>
               <li>
-                <Link to="/AddJob" className="main-menu" id="lws-addJob-menu">
+                <Link to="/Create" className="main-menu" id="lws-addJob-menu">
                   <i className="fa-solid fa-file-circle-plus"></i>
                   <span>Add NewJob</span>
                 </Link>

@@ -6,7 +6,9 @@ import { fetchWhichWillBeUpdate, updateJob } from "../features/job/jobSlice";
 function EditJobForm() {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { jobToEdit } = useSelector((state) => state.job);
+  const { jobToEdit, isLoading, isError, error } = useSelector(
+    (state) => state.job
+  );
   const [formData, setFormData] = useState({
     title: "",
     type: "",
@@ -136,6 +138,7 @@ function EditJobForm() {
 
           <div className="text-right">
             <button
+              disabled={isLoading}
               onClick={handleEdit}
               type="submit"
               id="lws-submit"
