@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { BsFillStopFill } from "react-icons/bs";
 function Job({ job: { title, type, deadline, salary, id } }) {
   const navigate = useNavigate();
+
   function handleEdit() {
-    navigate("/EditJob");
+    navigate(`/EditJob/${id}`);
   }
   return (
     <div className="lws-single-job">
@@ -12,8 +13,6 @@ function Job({ job: { title, type, deadline, salary, id } }) {
         <h2 className="lws-title">{title}</h2>
         <div className="job-footers">
           <div className="lws-type">
-            {/* <!-- Fulltime - #FF8A00,  --><!-- Internship - #FF5757,  --><!-- Remote - #56E5C4,  --> */}
-
             <BsFillStopFill
               className={`!text-[${
                 type === "Full Time"

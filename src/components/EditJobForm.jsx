@@ -1,6 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { fetchWhichWillBeUpdate, updateJob } from "../features/job/jobSlice";
 
 function EditJobForm() {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const { jobToEdit } = useSelector((state) => state.job);
+  useEffect(() => {
+    dispatch(fetchWhichWillBeUpdate(id));
+  }, [dispatch, id]);
+
+  function handleEdit(event) {
+    const { elements } = event.target;
+    const jobData = {
+      title: elements.lwsJobTitle.value,
+      type: elements.lwsJobType.value,
+      salary: +elements.lwsJobSalary.value,
+      deadline: elements.lwsJobDeadline.value,
+    };
+    dispatch(updateJob(id, jobData));
+  }
   return (
     <main className="max-w-3xl rounded-lg mx-auto relative z-20 p-10 xl:max-w-none bg-[#1E293B]">
       <h1 className="mb-10 text-center lws-section-title">Edit Job</h1>
@@ -14,8 +34,12 @@ function EditJobForm() {
             >
               Job Title
             </label>
-            <select id="lws-JobTitle" name="lwsJobTitle" required>
-              <option value="" hidden >
+            <select
+              id="lws-JobTitle"
+              name="lwsJobTitle"
+              required
+            >
+              <option value="" hidden>
                 Select Job
               </option>
               <option>Software Engineer</option>
@@ -37,7 +61,7 @@ function EditJobForm() {
 
           <div className="fieldContainer">
             <label htmlFor="lws-JobType">Job Type</label>
-            <select id="lws-JobType" name="lwsJobType" required>
+            <select value={""} id="lws-JobType" name="lwsJobType" required>
               <option value="" hidden>
                 Select Job Type
               </option>
@@ -74,6 +98,7 @@ function EditJobForm() {
 
           <div className="text-right">
             <button
+              onClick={handleEdit}
               type="submit"
               id="lws-submit"
               className="cursor-pointer btn btn-primary w-fit"
