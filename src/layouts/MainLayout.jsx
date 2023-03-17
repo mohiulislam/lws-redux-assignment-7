@@ -4,6 +4,7 @@ import Logo from "../assets/images/logo.svg";
 import { BsFillBriefcaseFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { filter } from "../features/filterJobs/filterJobsSlice";
+import { AiFillFileAdd } from "react-icons/ai";
 function MainLayout({ children }) {
   const dispatch = useDispatch();
   function handleFilter(filterBy) {
@@ -65,7 +66,7 @@ function MainLayout({ children }) {
               </li>
               <li>
                 <Link to="/Create" className="main-menu" id="lws-addJob-menu">
-                  <i className="fa-solid fa-file-circle-plus"></i>
+                  <AiFillFileAdd className="inline mr-1" />
                   <span>Add NewJob</span>
                 </Link>
               </li>
